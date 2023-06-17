@@ -78,8 +78,10 @@ def solution(col: int, state: List[int], stack: List):
         temp_state = copy.deepcopy(state)
         for j in range(8-col):
             temp_state[col-1 + j] = state[col-1 + j] & cons[i+1][j] # propagates constraints by &ing em bit-wise
-            if temp_state[col-1 + j] == 0: # check constraint validity
-                continue
+
+        # check constraint validity
+        if 0 in temp_state:
+            continue
 
         # adds to the stack 
         temp_stack = copy.deepcopy(stack)
@@ -88,6 +90,7 @@ def solution(col: int, state: List[int], stack: List):
         if col == 7:
             global ans
             ans.append(temp_stack)
+            print(temp_stack)
         else:
             solution(col + 1, temp_state, temp_stack)
 
@@ -95,4 +98,4 @@ def solution(col: int, state: List[int], stack: List):
 state = [255, 255, 255, 255, 255, 255, 255] # 255 = 11111111; ie. there are no constraints at the beginning
 solution(1, state, [])
 
-print(ans)
+# print(ans)
