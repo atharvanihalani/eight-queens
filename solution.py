@@ -1,5 +1,6 @@
 from typing import List
 import copy
+import time
 
 '''
 A recursive backtracking solution to the 8 queens problem
@@ -51,7 +52,7 @@ cons = {
 
 ans = [] 
 
-def solution(col: int, state: List[int], stack: List):
+def solution(col: int, state: List[int], stack: List, c_row: List[int]):
     '''
     The recursively backtracking method that iterates through the various permutations.
     This is only faster than an 8! brute force, because it 'prunes' invalid perms early
@@ -67,7 +68,7 @@ def solution(col: int, state: List[int], stack: List):
     stack: ie. the state of the board in the levels 'behind' THIS recursive call. 
            necessary for outputting a solution
     '''
-    for i in range(8):
+    for i in c_row:
         # checks that current square isn't under attack
         if col != 1:
             bin_col = '0'*(8-len(format(state[col-2], 'b'))) + format(state[col-2], 'b') # formats it to an 8-bit string
@@ -90,12 +91,15 @@ def solution(col: int, state: List[int], stack: List):
         if col == 7:
             global ans
             ans.append(temp_stack)
-            print(temp_stack)
+            # print(temp_stack)
         else:
-            solution(col + 1, temp_state, temp_stack)
+            temp_row = copy.deepcopy(c_row)
+            temp_row.remove(i)
+            solution(col + 1, temp_state, temp_stack, c_row)
 
 
 state = [255, 255, 255, 255, 255, 255, 255] # 255 = 11111111; ie. there are no constraints at the beginning
-solution(1, state, [])
-
-# print(ans)
+choose_row = [0, 1, 2, 3, 4, 5, 6, 7]
+start = time.time()
+solution(1, state, [], choose_row)
+# print(time.time() - start)

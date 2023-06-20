@@ -1,4 +1,5 @@
 from typing import List
+import time
 import math
 import copy
 
@@ -34,8 +35,12 @@ def solution(n: int):
     these are populated in the sols list
     n: n'''
     populate_constraints(n)
+
     state = [[1 for _ in range(n)] for __ in range(n-1)]
-    backtrackin(1, state, [], n)
+    choose_row = [i for i in range(n)]
+    start = time.time()
+    backtrackin(1, state, [], n, choose_row)
+    print(time.time() - start)
 
 def populate_constraints(n: int):
     '''
@@ -63,7 +68,7 @@ def constraints_at(row: int, n: int) -> List[List[int]]:
     
     return all_cols
 
-def backtrackin(col: int, state: List[List[int]], stack: List, n: int):
+def backtrackin(col: int, state: List[List[int]], stack: List, n: int, c_row: List[int]):
     '''
     This method recursively backtracks through the various permutations.
     It's faster than an 8! brute force, only because it 'prunes' invalid perms early
@@ -78,7 +83,7 @@ def backtrackin(col: int, state: List[List[int]], stack: List, n: int):
            column doesn't rlly have any constraints.
     stack: ie. the state of the board in the levels 'behind' THIS recursive call. 
            necessary for outputting a solution'''    
-    for i in range(n):
+    for i in c_row:
         # checks that current square isn't under attack
         if col != 1 and state[col-2][i] == 0:
             continue
@@ -86,15 +91,14 @@ def backtrackin(col: int, state: List[List[int]], stack: List, n: int):
         # apply constraints to the following columns
         temp_state = copy.deepcopy(state)
         for j in range(n-col):
-            for x in range(n):
+            for x in c_row:
                 if cons[i][j][x] == 1 and state[col-1 + j][x] == 1:
                     temp_state[col-1 + j][x] = 1
                 else:
                     temp_state[col-1 + j][x] = 0
 
         # checks constraint validity
-        zero = [0] * n
-        if zero in temp_state:
+        if [0] * n in temp_state:
             continue
 
         # adds to the stack 
@@ -105,7 +109,11 @@ def backtrackin(col: int, state: List[List[int]], stack: List, n: int):
             global sols
             sols.append(temp_stack)
         else:
-            backtrackin(col + 1, temp_state, temp_stack, n)
+            temp_row = copy.deepcopy(c_row)
+            temp_row.remove(i)
+            backtrackin(col + 1, temp_state, temp_stack, n, temp_row)
+
+solution(10)
 
 
 def parse_sols(sols: List[List[tuple]], n: int):
@@ -176,9 +184,3 @@ def rotate(sol: List[tuple], n: int) -> List[tuple]:
             copy_sol[i] = (int(x_), int(y_))
     return copy_sol
 
-
-solution(11)
-parse_sols(sols, 11)
-
-print(sols)
-print(len(sols))
