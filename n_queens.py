@@ -27,7 +27,7 @@ affects the constraints of the (j+1)'th column to its right. The key (lol) to
 deciphering this, is converting the integers to 8-bit strings. The 1's
 represent open spots, while the 0's are squares under attack'''
 cons = {}
-sols = []
+solutions = []
 
 def solution(n: int):
     '''
@@ -105,17 +105,56 @@ def backtrackin(col: int, state: List[List[int]], stack: List, n: int, c_row: Li
         temp_stack.append((col, i+1))
 
         if col == n:
-            global sols
-            sols.append(temp_stack)
+            global solutions
+            solutions.append(temp_stack)
         else:
             temp_row = copy.deepcopy(c_row)
             temp_row.remove(i)
             backtrackin(col + 1, temp_state, temp_stack, n, temp_row)
 
-solution(10)
 
 
-def parse_sols(sols: List[List[tuple]], n: int):
+def parse_sols(sols: List[List[tuple]]):
+    deriv_list = []
+    unique_sols = []
+    for sol in sols:
+        deriv = [sol[i+1][1] - sol[i][1] for i in range(len(sol)-1)]
+        if deriv in deriv_list:
+            continue
+        else:
+            deriv_list.extend(deriv_variants(sol))
+            unique_sols.append(sol)
+    # print(unique_sols)
+    global solutions
+    solutions = unique_sols
+
+def deriv_variants(sol: List[tuple]) -> List[List[int]]:
+    variants = []
+
+    diff_1 = [sol[i+1][1] - sol[i][1] for i in range(len(sol)-1)]
+    variants.append([i for i in diff_1])
+    variants.append([-i for i in diff_1])
+    diff_1.reverse()
+    variants.append([i for i in diff_1])
+    variants.append([-i for i in diff_1])
+
+    sol_transpose = sorted(sol, key=lambda x: x[1])
+    diff_2 = [sol_transpose[i+1][0] - sol_transpose[i][0] for i in range(len(sol)-1)]
+    variants.append([i for i in diff_2])
+    variants.append([-i for i in diff_2])
+    diff_2.reverse()
+    variants.append([i for i in diff_2])
+    variants.append([-i for i in diff_2])
+
+    return variants
+
+solution(7)
+parse_sols(solutions)
+print(solutions)
+
+
+
+def parse_sols_old(sols: List[List[tuple]], n: int):
     '''
     prunes sols to be unique. a unique solution can't be represented
     as any rotation/reflection of another solution \n
