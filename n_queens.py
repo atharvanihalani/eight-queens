@@ -38,9 +38,8 @@ def solution(n: int):
 
     state = [[1 for _ in range(n)] for __ in range(n-1)]
     choose_row = [i for i in range(n)]
-    start = time.time()
+    
     backtrackin(1, state, [], n, choose_row)
-    print(time.time() - start)
 
 def populate_constraints(n: int):
     '''
