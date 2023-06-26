@@ -4,7 +4,8 @@ was messing about w the 8 queens problem and thought I'd try to algorithmize it
 Changelog:
 
 June 22nd:
-    
+    redesigned parse_sols() in n_queens; it's wayyy slicker – in all possible regards
+
 
 everything before June 22nd:
     algorithmized 8 queens – DFS backtracking solution

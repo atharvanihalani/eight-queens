@@ -113,7 +113,6 @@ def backtrackin(col: int, state: List[List[int]], stack: List, n: int, c_row: Li
             backtrackin(col + 1, temp_state, temp_stack, n, temp_row)
 
 
-
 def parse_sols(sols: List[List[tuple]]):
     deriv_list = []
     unique_sols = []
@@ -124,7 +123,7 @@ def parse_sols(sols: List[List[tuple]]):
         else:
             deriv_list.extend(deriv_variants(sol))
             unique_sols.append(sol)
-    # print(unique_sols)
+
     global solutions
     solutions = unique_sols
 
