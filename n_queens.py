@@ -118,7 +118,7 @@ def parse_sols(sols: List[List[tuple]]):
     unique_sols = []
     for sol in sols:
         deriv = [sol[i+1][1] - sol[i][1] for i in range(len(sol)-1)]
-        if deriv in deriv_list:
+        if tuple(deriv) in deriv_list:
             continue
         else:
             deriv_list.extend(deriv_variants(sol))
@@ -131,27 +131,27 @@ def deriv_variants(sol: List[tuple]) -> List[List[int]]:
     variants = []
 
     diff_1 = [sol[i+1][1] - sol[i][1] for i in range(len(sol)-1)]
-    variants.append([i for i in diff_1])
-    variants.append([-i for i in diff_1])
+    variants.append(tuple([i for i in diff_1]))
+    variants.append(tuple([-i for i in diff_1]))
     diff_1.reverse()
-    variants.append([i for i in diff_1])
-    variants.append([-i for i in diff_1])
+    variants.append(tuple([i for i in diff_1]))
+    variants.append(tuple([-i for i in diff_1]))
 
     sol_transpose = sorted(sol, key=lambda x: x[1])
     diff_2 = [sol_transpose[i+1][0] - sol_transpose[i][0] for i in range(len(sol)-1)]
-    variants.append([i for i in diff_2])
-    variants.append([-i for i in diff_2])
+    variants.append(tuple([i for i in diff_2]))
+    variants.append(tuple([-i for i in diff_2]))
     diff_2.reverse()
-    variants.append([i for i in diff_2])
-    variants.append([-i for i in diff_2])
+    variants.append(tuple([i for i in diff_2]))
+    variants.append(tuple([-i for i in diff_2]))
 
     return variants
 
-solution(7)
+solution(6)
 parse_sols(solutions)
 print(solutions)
 
-
+print(deriv_variants([(1, 2), (2, 4), (3, 6), (4, 1), (5, 3), (6, 5)]))
 
 def parse_sols_old(sols: List[List[tuple]], n: int):
     '''

@@ -3,9 +3,19 @@ import numpy as np
 import copy
 
 '''
+
+This isn't your typical approach to n-queens cubed. I assume that a queen attacks 
+any square on the SLICE it's resting on (in addition to the 'body diagonal'). Most
+of the existing work, however, has a queen only moving along linear axes. 
+I'll be assuming the latter in 
+
 notes:
     n increases => more possible solutions
     greater dimension => more possible solutions
+
+TODO:
+    parse unique solutions in 3d
+
 
 '''
 
@@ -100,6 +110,6 @@ def test_sols(sols: List[List[tuple]]) -> bool:
 
 
 
-# solution(4)
-
+solution(4)
+print(len(sols))
 
