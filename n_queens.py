@@ -23,9 +23,17 @@ iterating through the solutions list:
 
 '''
 cons[i][j] tells you how placing a queen at the i'th row (for ANY column)
-affects the constraints of the (j+1)'th column to its right. The key (lol) to 
-deciphering this, is converting the integers to 8-bit strings. The 1's
-represent open spots, while the 0's are squares under attack'''
+affects the constraints of the (j+1)'th column to its right. 
+you might be tryna peek at cons[] in the debugger. you're probably confused.
+here's kinda how to understand it visually (note: the comments all mention the 
+algorithm traversing left-to-right, but the visual here is top-to-bottom; mathematically,
+however, it's all the same):
+    cons[] has n elts (i-indices). 
+    expand any one of these; you'll find it containing n-1 elts (stacked vertically).
+    imagine a 'phantom' row, right above j-index 0 – this now represents an nxn board.
+    imagine placing a queen in the i-th spot of this phantom row
+    the 0s running down vertically and diagonally represent the squares that the queen is attacking
+    '''
 cons = {}
 solutions = []
 

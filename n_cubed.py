@@ -1,17 +1,75 @@
 from typing import List
 
-'''
-here, i'll be taking a slightly different approach from the 2-dimensional
-problem.
-    1) i won't be encoding 
-    
 
-'''
-
-
-
-
+cons = {}
 sols = []
+
+
+def populate_constraints(n: int):
+    '''
+    populates the entire constraints matrix \n
+    n: side length'''
+    for i in range(n):
+        for j in range(n):
+            cons[(i, j)] = constraints_at(i, j, n)
+
+def constraints_at(row: int, col: int, n: int) -> List[List[List[int]]]:
+    all_slices = []
+
+    # tight 2d constraints for THIS slice
+    # factor/recurse this following bit out later
+    slice_0 = [[1 for _ in range(n)] for __ in range(n)]
+    slice_0[row] = [0 for _ in range(n)]
+    for i in range(n):
+        slice_0[i][col] = 0
+
+        col_idx_1 = (row - i) + col
+        col_idx_2 = (i - row) + col
+
+        if col_idx_1 in range(n):
+            slice_0[i][col_idx_1] = 0
+        if col_idx_2 in range(n):
+            slice_0[i][col_idx_2] = 0
+    all_slices.append(slice_0)
+    
+    # + looser, dissapating constraints for subsequent slices
+    # AGAIN, make this next bit faar more tighter
+    for l in range(1, n): #for each slice
+        slice = [[1 for _ in range(n)] for __ in range(n)]
+        slice[row][col] = 0
+        if row + l in range(n):
+            slice[row + l][col] = 0
+        if row - l in range(n):
+            slice[row - l][col] = 0
+        if col + l in range(n):
+            slice[row][col + l] = 0
+        if col - l in range(n):
+            slice[row][col - l] = 0
+        
+        if (row + l in range(n)) and (col + l in range(n)):
+            slice[row + l][col + l] = 0
+        if (row + l in range(n)) and (col - l in range(n)):
+            slice[row + l][col - l] = 0
+        if (row - l in range(n)) and (col + l in range(n)):
+            slice[row - l][col + l] = 0
+        if (row - l in range(n)) and (col - l in range(n)):
+            slice[row - l][col - l] = 0
+
+        all_slices.append(slice)
+
+    return all_slices
+
+
+populate_constraints(3)
+print(cons)
+pass
+
+def solution(n: int):
+    # populate constraints
+    # 
+    pass
+
+
 
 def transpose(arr: List[List[int]]) -> List[List[int]]:
     new_arr = []
@@ -90,4 +148,4 @@ def deriv_variants_helper(sol: List[tuple]) -> List[List[tuple]]:
 
     return variants
 
-deriv_variants([(0, 0, 0), (1, 1, 2), (2, 3, 1), (3, 2, 3)])
+# deriv_variants([(0, 0, 0), (1, 1, 2), (2, 3, 1), (3, 2, 3)])
